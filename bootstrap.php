@@ -1,14 +1,10 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
-var_dump(111111111);
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
 ))->bootstrap();
-
-
-
 
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
@@ -47,24 +43,26 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
-$app->singleton(
-    Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class
-);
+if (php_sapi_name() == 'cli') {
+	//cli 加载命令行
+    $app->singleton(
+        Illuminate\Contracts\Console\Kernel::class,
+        App\Console\Kernel::class
+    );
+}
 
-// /*
-// |--------------------------------------------------------------------------
-// | Register Config Files
-// |--------------------------------------------------------------------------
-// |
-// | Now we will register the "app" configuration file. If the file exists in
-// | your configuration directory it will be loaded; otherwise, we'll load
-// | the default version. You may register other files below as needed.
-// |
-//  */
+/*
+|--------------------------------------------------------------------------
+| Register Config Files
+|--------------------------------------------------------------------------
+|
+| Now we will register the "app" configuration file. If the file exists in
+| your configuration directory it will be loaded; otherwise, we'll load
+| the default version. You may register other files below as needed.
+|
+ */
 
 $app->configure('app');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -75,8 +73,8 @@ $app->configure('app');
 | be global middleware that run before and after each request into a
 | route or middleware that'll be assigned to some specific routes.
 |
-*/
- 
+ */
+
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
